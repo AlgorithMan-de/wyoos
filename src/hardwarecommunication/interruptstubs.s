@@ -4,20 +4,20 @@
 
 .section .text
 
-.extern _ZN16InterruptManager15HandleInterruptEhj
+.extern _ZN4myos21hardwarecommunication16InterruptManager15HandleInterruptEhj
 
 
 .macro HandleException num
-.global _ZN16InterruptManager19HandleException\num\()Ev
-_ZN16InterruptManager19HandleException\num\()Ev:
+.global _ZN4myos21hardwarecommunication16InterruptManager19HandleException\num\()Ev
+_ZN4myos21hardwarecommunication16InterruptManager19HandleException\num\()Ev:
     movb $\num, (interruptnumber)
     jmp int_bottom
 .endm
 
 
 .macro HandleInterruptRequest num
-.global _ZN16InterruptManager26HandleInterruptRequest\num\()Ev
-_ZN16InterruptManager26HandleInterruptRequest\num\()Ev:
+.global _ZN4myos21hardwarecommunication16InterruptManager26HandleInterruptRequest\num\()Ev
+_ZN4myos21hardwarecommunication16InterruptManager26HandleInterruptRequest\num\()Ev:
     movb $\num + IRQ_BASE, (interruptnumber)
     jmp int_bottom
 .endm
@@ -80,7 +80,7 @@ int_bottom:
     # C++ Handler aufrufen
     pushl %esp
     push (interruptnumber)
-    call _ZN16InterruptManager15HandleInterruptEhj
+    call _ZN4myos21hardwarecommunication16InterruptManager15HandleInterruptEhj
     add %esp, 6
     mov %eax, %esp # den stack wechseln
 
@@ -91,8 +91,8 @@ int_bottom:
     pop %ds
     popa
 
-.global _ZN16InterruptManager15InterruptIgnoreEv
-_ZN16InterruptManager15InterruptIgnoreEv:
+.global _ZN4myos21hardwarecommunication16InterruptManager15InterruptIgnoreEv
+_ZN4myos21hardwarecommunication16InterruptManager15InterruptIgnoreEv:
 
     iret
 
