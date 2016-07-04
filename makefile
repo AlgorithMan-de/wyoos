@@ -7,7 +7,11 @@ ASPARAMS = --32
 LDPARAMS = -melf_i386
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 objects = loader.o gdt.o port.o kernel.o
+=======
+objects = loader.o gdt.o port.o interruptstubs.o interrupts.o keyboard.o kernel.o
+>>>>>>> a2f1cad... Files for part 6, https://www.youtube.com/watch?v=RTKj4jdo_2s
 =======
 objects = loader.o gdt.o port.o interruptstubs.o interrupts.o keyboard.o kernel.o
 >>>>>>> a2f1cad... Files for part 6, https://www.youtube.com/watch?v=RTKj4jdo_2s
