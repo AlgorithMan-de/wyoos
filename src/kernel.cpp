@@ -8,6 +8,7 @@
 #include <drivers/keyboard.h>
 #include <drivers/mouse.h>
 #include <drivers/vga.h>
+#include <drivers/ata.h>
 #include <gui/desktop.h>
 #include <gui/window.h>
 #include <multitasking.h>
@@ -190,7 +191,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     printfHex(((size_t)allocated >> 8 ) & 0xFF);
     printfHex(((size_t)allocated      ) & 0xFF);
     printf("\n");
-        
+    
     TaskManager taskManager;
     /*
     Task task1(&gdt, taskA);
@@ -245,7 +246,29 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     #endif
 
         
-
+    printf("\nS-ATA primary master: ");
+    AdvancedTechnologyAttachment ata0m(true, 0x1F0);
+    ata0m.Identify();
+    
+    printf("\nS-ATA primary slave: ");
+    AdvancedTechnologyAttachment ata0s(false, 0x1F0);
+    ata0s.Identify();
+    ata0s.Write28(0, (uint8_t*)"http://www.AlgorithMan.de", 25);
+    ata0s.Flush();
+    ata0s.Read28(0);
+    
+    printf("\nS-ATA secondary master: ");
+    AdvancedTechnologyAttachment ata1m(true, 0x170);
+    ata1m.Identify();
+    
+    printf("\nS-ATA secondary slave: ");
+    AdvancedTechnologyAttachment ata1s(false, 0x170);
+    ata1s.Identify();
+    
+    // third: 0x1E8
+    // fourth: 0x168
+        
+        
     amd_am79c973* eth0 = (amd_am79c973*)(drvManager.drivers[2]);
     eth0->Send((uint8_t*)"Hello Network", 13);
         
