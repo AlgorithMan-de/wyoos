@@ -79,6 +79,8 @@ namespace myos
                 static void HandleInterruptRequest0x0F();
                 static void HandleInterruptRequest0x31();
 
+                static void HandleInterruptRequest0x80();
+
                 static void HandleException0x00();
                 static void HandleException0x01();
                 static void HandleException0x02();
@@ -99,7 +101,7 @@ namespace myos
                 static void HandleException0x11();
                 static void HandleException0x12();
                 static void HandleException0x13();
-
+                
                 static myos::common::uint32_t HandleInterrupt(myos::common::uint8_t interrupt, myos::common::uint32_t esp);
                 myos::common::uint32_t DoHandleInterrupt(myos::common::uint8_t interrupt, myos::common::uint32_t esp);
 

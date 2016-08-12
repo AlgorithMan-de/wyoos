@@ -117,6 +117,8 @@ InterruptManager::InterruptManager(uint16_t hardwareInterruptOffset, GlobalDescr
     SetInterruptDescriptorTableEntry(hardwareInterruptOffset + 0x0E, CodeSegment, &HandleInterruptRequest0x0E, 0, IDT_INTERRUPT_GATE);
     SetInterruptDescriptorTableEntry(hardwareInterruptOffset + 0x0F, CodeSegment, &HandleInterruptRequest0x0F, 0, IDT_INTERRUPT_GATE);
 
+    SetInterruptDescriptorTableEntry(                          0x80, CodeSegment, &HandleInterruptRequest0x80, 0, IDT_INTERRUPT_GATE);
+
     programmableInterruptControllerMasterCommandPort.Write(0x11);
     programmableInterruptControllerSlaveCommandPort.Write(0x11);
 

@@ -13,6 +13,7 @@ objects = obj/loader.o \
           obj/hardwarecommunication/port.o \
           obj/hardwarecommunication/interruptstubs.o \
           obj/hardwarecommunication/interrupts.o \
+          obj/syscalls.o \
           obj/multitasking.o \
           obj/drivers/amd_am79c973.o \
           obj/hardwarecommunication/pci.o \
