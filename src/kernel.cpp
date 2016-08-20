@@ -15,7 +15,7 @@
 #include <multitasking.h>
 
 #include <drivers/amd_am79c973.h>
-
+#include <net/etherframe.h>
 
 // #define GRAPHICSMODE
 
@@ -25,6 +25,7 @@ using namespace myos::common;
 using namespace myos::drivers;
 using namespace myos::hardwarecommunication;
 using namespace myos::gui;
+using namespace myos::net;
 
 
 
@@ -199,11 +200,12 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     printf("\n");
     
     TaskManager taskManager;
+    /*
     Task task1(&gdt, taskA);
     Task task2(&gdt, taskB);
     taskManager.AddTask(&task1);
     taskManager.AddTask(&task2);
-
+    */
     
     InterruptManager interrupts(0x20, &gdt, &taskManager);
     SyscallHandler syscalls(&interrupts, 0x80);
@@ -279,7 +281,9 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     
     
     amd_am79c973* eth0 = (amd_am79c973*)(drvManager.drivers[2]);
-    eth0->Send((uint8_t*)"Hello Network", 13);
+    EtherFrameProvider etherframe(eth0);
+    etherframe.Send(0xFFFFFFFFFFFF, 0x0608, (uint8_t*)"FOO", 3);
+    //eth0->Send((uint8_t*)"Hello Network", 13);
         
 
     interrupts.Activate();
