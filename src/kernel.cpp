@@ -17,6 +17,7 @@
 #include <drivers/amd_am79c973.h>
 #include <net/etherframe.h>
 #include <net/arp.h>
+#include <net/ipv4.h>
 
 // #define GRAPHICSMODE
 
@@ -281,27 +282,37 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     */
     
 
-    // IP 10.0.2.15
+                 
+
+                   
+    amd_am79c973* eth0 = (amd_am79c973*)(drvManager.drivers[2]);
+
+    
+    // IP Address
     uint8_t ip1 = 10, ip2 = 0, ip3 = 2, ip4 = 15;
     uint32_t ip_be = ((uint32_t)ip4 << 24)
                 | ((uint32_t)ip3 << 16)
                 | ((uint32_t)ip2 << 8)
                 | (uint32_t)ip1;
+    eth0->SetIPAddress(ip_be);
+    EtherFrameProvider etherframe(eth0);
+    AddressResolutionProtocol arp(&etherframe);    
 
-    // IP 10.0.2.2
+    
+    // IP Address of the default gateway
     uint8_t gip1 = 10, gip2 = 0, gip3 = 2, gip4 = 2;
     uint32_t gip_be = ((uint32_t)gip4 << 24)
                    | ((uint32_t)gip3 << 16)
                    | ((uint32_t)gip2 << 8)
                    | (uint32_t)gip1;
+    
+    uint8_t subnet1 = 255, subnet2 = 255, subnet3 = 255, subnet4 = 0;
+    uint32_t subnet_be = ((uint32_t)subnet4 << 24)
+                   | ((uint32_t)subnet3 << 16)
+                   | ((uint32_t)subnet2 << 8)
+                   | (uint32_t)subnet1;
                    
-    amd_am79c973* eth0 = (amd_am79c973*)(drvManager.drivers[2]);
-
-    eth0->SetIPAddress(ip_be);
-
-    EtherFrameProvider etherframe(eth0);
-
-    AddressResolutionProtocol arp(&etherframe);    
+    InternetProtocolProvider ipv4(&etherframe, &arp, gip_be, subnet_be);
     
     //etherframe.Send(0xFFFFFFFFFFFF, 0x0608, (uint8_t*)"FOO", 3);
     //eth0->Send((uint8_t*)"Hello Network", 13);
@@ -310,7 +321,8 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     interrupts.Activate();
 
     printf("\n\n\n\n\n\n\n\n");
-    arp.Resolve(gip_be);
+    //arp.Resolve(gip_be);
+    ipv4.Send(gip_be, 0x0008, (uint8_t*) "foobar", 6);
     
 
     while(1)
