@@ -31,6 +31,10 @@ void EtherFrameHandler::Send(common::uint64_t dstMAC_BE, common::uint8_t* data, 
     backend->Send(dstMAC_BE, etherType_BE, data, size);
 }
 
+uint32_t EtherFrameHandler::GetIPAddress()
+{
+    return backend->GetIPAddress();
+}
 
 
 
