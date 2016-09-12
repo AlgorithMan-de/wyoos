@@ -45,7 +45,7 @@ EtherFrameProvider::EtherFrameProvider(amd_am79c973* backend)
 EtherFrameProvider::~EtherFrameProvider()
 {
 }
-            
+
 bool EtherFrameProvider::OnRawDataReceived(common::uint8_t* buffer, common::uint32_t size)
 {
     if(size < sizeof(EtherFrameHeader))
@@ -60,7 +60,6 @@ bool EtherFrameProvider::OnRawDataReceived(common::uint8_t* buffer, common::uint
         if(handlers[frame->etherType_BE] != 0)
             sendBack = handlers[frame->etherType_BE]->OnEtherFrameReceived(
                 buffer + sizeof(EtherFrameHeader), size - sizeof(EtherFrameHeader));
-        
     }
     
     if(sendBack)
