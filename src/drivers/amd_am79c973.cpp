@@ -173,8 +173,8 @@ void amd_am79c973::Send(uint8_t* buffer, int size)
                 src >= buffer; src--, dst--)
         *dst = *src;
         
-    printf("\nSENDING: ");
-    for(int i = 0; i < (size>64?64:size); i++)
+    printf("\nSEND: ");
+    for(int i = 14+20; i < (size>64?64:size); i++)
     {
         printfHex(buffer[i]);
         printf(" ");
@@ -190,7 +190,7 @@ void amd_am79c973::Send(uint8_t* buffer, int size)
 
 void amd_am79c973::Receive()
 {
-    printf("\nRECEIVING: ");
+    printf("\nRECV: ");
     
     for(; (recvBufferDescr[currentRecvBuffer].flags & 0x80000000) == 0;
         currentRecvBuffer = (currentRecvBuffer + 1) % 8)
@@ -205,7 +205,7 @@ void amd_am79c973::Receive()
             
             uint8_t* buffer = (uint8_t*)(recvBufferDescr[currentRecvBuffer].address);
 
-            for(int i = 0; i < (size>64?64:size); i++)
+            for(int i = 14+20; i < (size>64?64:size); i++)
             {
                 printfHex(buffer[i]);
                 printf(" ");
