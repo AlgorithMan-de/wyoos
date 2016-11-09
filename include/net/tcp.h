@@ -2,6 +2,11 @@
 #define __MYOS__NET__TCP_H
 
 
+#include <common/types.h>
+#include <net/ipv4.h>
+#include <memorymanagement.h>
+
+
 namespace myos
 {
     namespace net
@@ -22,8 +27,8 @@ namespace myos
             CLOSING,
             TIME_WAIT,
             
-            CLOSE_WAIT,
-            LAST_ACK,
+            CLOSE_WAIT
+            //LAST_ACK
         };
         
         enum TransmissionControlProtocolFlag
@@ -47,15 +52,25 @@ namespace myos
             common::uint32_t sequenceNumber;
             common::uint32_t acknowledgementNumber;
             
+            common::uint8_t reserved : 4;
             common::uint8_t headerSize32 : 4;
-            common::uint8_t reserved : 3;
-            common::uint16_t flags : 9;
+            common::uint8_t flags;
             
             common::uint16_t windowSize;
             common::uint16_t checksum;
             common::uint16_t urgentPtr;
+            
+            common::uint32_t options;
         } __attribute__((packed));
        
+      
+        struct TransmissionControlProtocolPseudoHeader
+        {
+            common::uint32_t srcIP;
+            common::uint32_t dstIP;
+            common::uint16_t protocol;
+            common::uint16_t totalLength;
+        } __attribute__((packed));
       
       
         class TransmissionControlProtocolSocket;
@@ -68,7 +83,7 @@ namespace myos
         public:
             TransmissionControlProtocolHandler();
             ~TransmissionControlProtocolHandler();
-            virtual void HandleTransmissionControlProtocolMessage(TransmissionControlProtocolSocket* socket, common::uint8_t* data, common::uint16_t size);
+            virtual bool HandleTransmissionControlProtocolMessage(TransmissionControlProtocolSocket* socket, common::uint8_t* data, common::uint16_t size);
         };
       
         
@@ -82,6 +97,8 @@ namespace myos
             common::uint16_t localPort;
             common::uint32_t localIP;
             common::uint32_t sequenceNumber;
+            common::uint32_t acknowledgementNumber;
+
             TransmissionControlProtocolProvider* backend;
             TransmissionControlProtocolHandler* handler;
             
@@ -89,7 +106,7 @@ namespace myos
         public:
             TransmissionControlProtocolSocket(TransmissionControlProtocolProvider* backend);
             ~TransmissionControlProtocolSocket();
-            virtual void HandleTransmissionControlProtocolMessage(common::uint8_t* data, common::uint16_t size);
+            virtual bool HandleTransmissionControlProtocolMessage(common::uint8_t* data, common::uint16_t size);
             virtual void Send(common::uint8_t* data, common::uint16_t size);
             virtual void Disconnect();
         };
@@ -111,7 +128,8 @@ namespace myos
 
             virtual TransmissionControlProtocolSocket* Connect(common::uint32_t ip, common::uint16_t port);
             virtual void Disconnect(TransmissionControlProtocolSocket* socket);
-            virtual void Send(TransmissionControlProtocolSocket* socket, common::uint8_t* data, common::uint16_t size);
+            virtual void Send(TransmissionControlProtocolSocket* socket, common::uint8_t* data, common::uint16_t size,
+                              common::uint16_t flags = 0);
 
             virtual TransmissionControlProtocolSocket* Listen(common::uint16_t port);
             virtual void Bind(TransmissionControlProtocolSocket* socket, TransmissionControlProtocolHandler* handler);
