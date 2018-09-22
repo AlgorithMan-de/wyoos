@@ -35,7 +35,7 @@ using namespace myos::net;
 
 
 
-void printf(char* str)
+void printf(int8_t* str)
 {
     static uint16_t* VideoMemory = (uint16_t*)0xb8000;
 
