@@ -5,7 +5,7 @@ using namespace myos::common;
 using namespace myos::hardwarecommunication;
 
 
-void printf(char* str);
+void printf(int8_t* str);
 void printfHex(uint8_t);
 
 
