@@ -80,7 +80,7 @@ void AdvancedTechnologyAttachment::Read28(common::uint32_t sectorNum, int count)
     sectorCountPort.Write(1);
     lbaLowPort.Write(  sectorNum & 0x000000FF );
     lbaMidPort.Write( (sectorNum & 0x0000FF00) >> 8);
-    lbaLowPort.Write( (sectorNum & 0x00FF0000) >> 16 );
+    lbaHiPort.Write( (sectorNum & 0x00FF0000) >> 16 );
     commandPort.Write(0x20);
     
     uint8_t status = commandPort.Read();
