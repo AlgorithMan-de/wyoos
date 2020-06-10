@@ -34,9 +34,17 @@ test.iso: uranium.bin
 	grub-mkrescue --output=test.iso iso
 	rm -rf iso
 
-run: test.iso
+vbox: test.iso
 	(killall VirtualBox && sleep 1) || true
 	VirtualBox --startvm 'My Operating System' &
+
+test: test.iso
+	(killall qemu-system-i386 && sleep 1) || true
+        qemu-system-i386 -cdrom test.iso -m 128M &
+
+qemu: test.iso
+        (killall qemu-system-i386 && sleep 1) || true
+        qemu-system-i386 -cdrom test.iso -m 128M &
 
 install: uranium.bin
 	sudo cp $< /boot/uranium.bin
