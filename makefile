@@ -41,15 +41,17 @@ vbox: test.iso
 
 test: test.iso
 	(killall qemu-system-i386 && sleep 1) || true
-		qemu-system-i386 -cdrom test.iso -m 128M &
+	qemu-system-i386 -cdrom test.iso -m 128M &
 
 qemu: test.iso
-		(killall qemu-system-i386 && sleep 1) || true
-		qemu-system-i386 -cdrom test.iso -m 128M &
+	(killall qemu-system-i386 && sleep 1) || true
+	qemu-system-i386 -cdrom test.iso -m 128M &
 
 install: uranium.bin
 	sudo cp $< /boot/uranium.bin
 
 .PHONY: clean
 clean:
+	(killall qemu-system-i386 && sleep 1) || true
+	(killall VirtualBox && sleep 1) || true
 	rm -f $(objects) uranium.bin test.iso
