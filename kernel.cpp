@@ -39,7 +39,17 @@ void printf(char* str)
     }
 }
 
+void clear()
+{
+    static uint16_t* VideoMemory = (uint16_t*)0xb8000;
+    static uint8_t x=0,y=0;
 
+    for(y = 0; y < 25; y++)
+        for(x = 0; x < 80; x++)
+            VideoMemory[80*y+x] = (VideoMemory[80*y+x] & 0xFF00) | ' ';
+    x = 0;
+    y = 0;
+}
 
 typedef void (*constructor)();
 extern "C" constructor start_ctors;
@@ -54,8 +64,12 @@ extern "C" void callConstructors()
 
 extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot_magic*/)
 {
-    printf("Hello World! --- http://www.AlgorithMan.de");
+    printf("Hello World!");
+    printf("more text that'll be erased");
 
+    clear();
+
+    printf("not erased!")    ;
     GlobalDescriptorTable gdt;
 
     while(1);
