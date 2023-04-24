@@ -33,7 +33,7 @@ namespace myos
          common::uint32_t signature;
          common::uint16_t unused;
 
-         PartitionTableEntry primaryPartitions[4];
+         PartitionTableEntry primaryPartition[4];
 
          common::uint16_t magicnumber;
       } __attribute__((packed));

@@ -102,12 +102,13 @@ void AdvancedTechnologyAttachment::Read28(common::uint32_t sectorNum, common::ui
    {
       uint16_t wdata = dataPort.Read();
 
+/*
       char *text = "  \0";
       if(i+1 < count)
          text[1] = (wdata >> 8) & 0x00FF;
       text[0] = wdata & 0x00FF;
       printf(text);
-
+*/
 
       data[i] = wdata & 0x00FF;
          data[i+1] = (wdata >> 8) & 0x00FF;
