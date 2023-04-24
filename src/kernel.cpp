@@ -10,6 +10,7 @@
 #include <drivers/mouse.h>
 #include <drivers/vga.h>
 #include <drivers/ata.h>
+#include <filesystem/msdospart.h>
 #include <gui/desktop.h>
 #include <gui/window.h>
 #include <multitasking.h>
