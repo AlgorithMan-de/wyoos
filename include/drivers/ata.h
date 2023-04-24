@@ -15,6 +15,7 @@ namespace myos
         {
         protected:
             bool master;
+            common::uint16_t bytesPerSector;
             hardwarecommunication::Port16Bit dataPort;
             hardwarecommunication::Port8Bit errorPort;
             hardwarecommunication::Port8Bit sectorCountPort;
@@ -30,7 +31,7 @@ namespace myos
             ~AdvancedTechnologyAttachment();
             
             void Identify();
-            void Read28(common::uint32_t sectorNum, int count = 512);
+            void Read28(common::uint32_t sectorNum, common::uint8_t* data, common::uint32_t count);
             void Write28(common::uint32_t sectorNum, common::uint8_t* data, common::uint32_t count);
             void Flush();
             
